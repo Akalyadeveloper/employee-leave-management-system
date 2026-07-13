@@ -12,9 +12,23 @@ const Register = () => {
     setForm((prev) => ({ ...prev, [event.target.name]: event.target.value }))
   }
 
+
+  const validateForm = () => {
+    if (!form.name.trim()) return 'Name is required.'
+    if (!form.email.trim()) return 'Email is required.'
+    if (!form.password || form.password.length < 6) return 'Password must be at least 6 characters.'
+    if (!['employee', 'manager'].includes(form.role)) return 'Role must be selected.'
+    return ''
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault()
     setError('')
+    const validationError = validateForm()
+    if (validationError) {
+      setError(validationError)
+      return
+    }
     try {
       await register(form)
       navigate('/')
