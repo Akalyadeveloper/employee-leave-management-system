@@ -385,3 +385,6 @@ This project is created for educational purposes.
 **Built with ❤️ using React + Node.js + MongoDB**
 
 </div>
+
+## Security Note
+Environment files (.env) removed from version control for security. See .env.example for required variables.
