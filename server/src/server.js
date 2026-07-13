@@ -8,6 +8,7 @@ import authRoutes from './routes/auth.routes.js'
 import leaveRoutes from './routes/leave.routes.js'
 import dashboardRoutes from './routes/dashboard.routes.js'
 import { errorHandler, notFound } from './middleware/errorHandler.js'
+import logger from './utils/logger.js'
 
 dotenv.config()
 
@@ -15,6 +16,8 @@ const app = express()
 const PORT = process.env.PORT || 5000
 
 const allowedOrigins = process.env.CLIENT_URL?.split(',').map((url) => url.trim()) || ['http://localhost:5173']
+
+logger.info('Server', 'Initializing server', { allowedOrigins, nodeEnv: process.env.NODE_ENV })
 
 app.use(
   cors({
@@ -24,6 +27,15 @@ app.use(
 )
 app.use(express.json())
 app.use(cookieParser())
+
+// Request logging middleware
+app.use((req, res, next) => {
+  logger.request(req)
+  res.on('finish', () => {
+    logger.response(req, res)
+  })
+  next()
+})
 
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
@@ -48,7 +60,7 @@ app.use(errorHandler)
 
 const startServer = async () => {
   await connectDB()
-  app.listen(PORT, () => console.log(`API ready on port ${PORT}`))
+  app.listen(PORT, () => logger.info('Server', `API ready on port ${PORT}`))
 }
 
 // Only start server locally, not in Vercel
