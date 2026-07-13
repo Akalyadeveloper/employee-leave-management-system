@@ -158,9 +158,31 @@ Every endpoint listed in the requirement document is implemented in `server/src/
 - Create one manager and one employee account, then test the employee journey end-to-end before approving as a manager.
 - If something fails, the API responds with a clear message (thanks to Zod validation) so the UI can show friendly errors.
 
-## Next Steps / Deployment
-1. **Screenshots or video** – capture short clips for the README as requested (2-5 minutes walkthrough).
-2. **Production build** – deploy the backend (Render, Railway, etc.) and front (Netlify, Vercel). Update `CLIENT_URL` and `VITE_API_BASE_URL` accordingly.
-3. **Monitoring** – keep Mongo Atlas metrics open to monitor usage.
+## Deployment: Vercel Step-by-Step
 
-This repository now includes all required deliverables: clean code, documentation, `.env.example`, and a working application ready for deployment.
+### Frontend (React/Vite)
+1. **Push your code to GitHub.**
+2. Go to [Vercel](https://vercel.com) and click "Add New Project".
+3. Select your repo and let Vercel auto-detect Vite/React.
+4. In Vercel dashboard, go to Settings > Environment Variables and add:
+	- `VITE_API_BASE_URL=https://your-backend-url.vercel.app/api`
+5. Click **Deploy**. After deployment, note your frontend URL (e.g., `https://your-frontend.vercel.app`).
+
+### Backend (Express/Node)
+1. Make sure your backend is in the `server` folder and pushed to GitHub.
+2. In Vercel, click "Add New Project" and set the root directory to `server`.
+3. Set build command: `npm install`, output directory: `src`, entry point: `src/server.js`.
+4. In Vercel dashboard, go to Settings > Environment Variables and add:
+	- `MONGO_URI=your-mongodb-uri`
+	- `JWT_SECRET=your-jwt-secret`
+	- `CLIENT_URL=https://your-frontend.vercel.app`
+5. Click **Deploy**. After deployment, note your backend URL (e.g., `https://your-backend.vercel.app`).
+
+### Final Steps
+- Make sure your frontend’s `VITE_API_BASE_URL` matches your backend’s deployed URL.
+- Make sure your backend’s `CLIENT_URL` matches your frontend’s deployed URL.
+- Test both URLs to confirm everything works.
+
+**Tip:** If you update environment variables, redeploy your project in Vercel for changes to take effect.
+
+This repository now includes all required deliverables: clean code, documentation, `.env.example`, `.env.vercel.example`, and a working application ready for deployment.
