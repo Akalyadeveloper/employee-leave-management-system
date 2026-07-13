@@ -1,4 +1,4 @@
-import express from 'express'
+﻿import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
@@ -9,27 +9,30 @@ import leaveRoutes from './routes/leave.routes.js'
 import dashboardRoutes from './routes/dashboard.routes.js'
 import { errorHandler, notFound } from './middleware/errorHandler.js'
 import logger from './utils/logger.js'
+import { isDemoMode } from './services/demoDb.js'
 
 dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT || 5000
 
-// Set production mode on Vercel
 if (process.env.VERCEL) {
   process.env.NODE_ENV = 'production'
 }
 
-const allowedOrigins = process.env.CLIENT_URL?.split(',').map((url) => url.trim()) || ['http://localhost:5173']
+const allowedOrigins = process.env.CLIENT_URL?.split(',').map((url) => url.trim()).filter(Boolean) || ['http://localhost:5173']
+const isLocalDevelopmentOrigin = (origin) => /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
 
 logger.info('Server', 'Initializing server', { allowedOrigins, nodeEnv: process.env.NODE_ENV })
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, curl, etc)
       if (!origin) return callback(null, true)
       if (allowedOrigins.includes(origin)) {
+        return callback(null, true)
+      }
+      if (process.env.NODE_ENV !== 'production' && isLocalDevelopmentOrigin(origin)) {
         return callback(null, true)
       }
       logger.warn('CORS', 'Blocked origin', { origin })
@@ -41,7 +44,6 @@ app.use(
 app.use(express.json())
 app.use(cookieParser())
 
-// Request logging middleware
 app.use((req, res, next) => {
   logger.request(req)
   res.on('finish', () => {
@@ -61,7 +63,7 @@ app.get('/', (req, res) => {
 app.get('/favicon.ico', (req, res) => res.status(204).end())
 
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', time: new Date().toISOString() })
+  res.json({ status: 'ok', time: new Date().toISOString(), demoMode: isDemoMode() })
 })
 
 app.use('/api/auth', authRoutes)
@@ -72,11 +74,17 @@ app.use(notFound)
 app.use(errorHandler)
 
 const startServer = async () => {
-  await connectDB()
-  app.listen(PORT, () => logger.info('Server', `API ready on port ${PORT}`))
+  try {
+    await connectDB()
+    app.listen(PORT, () => {
+      logger.info('Server', `API ready on port ${PORT}${isDemoMode() ? ' (demo mode)' : ''}`)
+    })
+  } catch (error) {
+    logger.error('Server', 'Failed to start API server', { error: error.message })
+    process.exit(1)
+  }
 }
 
-// Only start server locally, not in Vercel
 if (process.env.VERCEL === undefined) {
   startServer()
 }

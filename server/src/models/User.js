@@ -1,5 +1,6 @@
-import mongoose from 'mongoose'
+﻿import mongoose from 'mongoose'
 import { DEFAULT_LEAVE_BALANCE } from '../utils/constants.js'
+import { createModelProxy } from '../services/demoDb.js'
 
 const leaveBalanceSchema = new mongoose.Schema(
   {
@@ -51,4 +52,6 @@ userSchema.methods.restoreLeave = function restoreLeave(type, days) {
   return this.leaveBalance[type]
 }
 
-export const User = mongoose.model('User', userSchema)
+const mongooseModel = mongoose.models.User || mongoose.model('User', userSchema)
+
+export const User = createModelProxy(mongooseModel, 'users')

@@ -1,4 +1,5 @@
-import mongoose from 'mongoose'
+﻿import mongoose from 'mongoose'
+import { createModelProxy } from '../services/demoDb.js'
 
 const leaveRequestSchema = new mongoose.Schema(
   {
@@ -14,4 +15,6 @@ const leaveRequestSchema = new mongoose.Schema(
   { timestamps: true },
 )
 
-export const LeaveRequest = mongoose.model('LeaveRequest', leaveRequestSchema)
+const mongooseModel = mongoose.models.LeaveRequest || mongoose.model('LeaveRequest', leaveRequestSchema)
+
+export const LeaveRequest = createModelProxy(mongooseModel, 'leaves')

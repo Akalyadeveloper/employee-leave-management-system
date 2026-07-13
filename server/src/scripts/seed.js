@@ -18,8 +18,25 @@ const randomLeaveBalance = () => ({
   vacation: Math.floor(Math.random() * 5) + 1  // 1-5
 })
 
-// Sample employees data - Original 10 employees
 const employees = [
+  {
+    name: 'Demo Employee',
+    email: 'employee@test.com',
+    password: '123456',
+    role: 'employee',
+    department: 'Engineering',
+    designation: 'Software Engineer',
+    leaveBalance: { sick: 10, casual: 5, vacation: 5 }
+  },
+  {
+    name: 'Demo Manager',
+    email: 'manager@test.com',
+    password: '123456',
+    role: 'manager',
+    department: 'Engineering',
+    designation: 'Engineering Manager',
+    leaveBalance: { sick: 10, casual: 5, vacation: 5 }
+  },
   {
     name: 'Chris',
     email: 'chris@gmail.com',
@@ -404,6 +421,7 @@ const seed = async () => {
 
     // Create regular leave requests for employees (2-3 per employee)
     for (const employee of createdEmployees) {
+      if (employee.role === 'manager') continue
       const numRequests = Math.floor(Math.random() * 2) + 2 // 2-3 requests
 
       for (let i = 0; i < numRequests; i++) {
@@ -450,9 +468,10 @@ const seed = async () => {
     // Create additional ~300 leave requests with variety (some from yesterday)
     console.log('📝 Creating additional leave requests (including yesterday\'s requests)...')
     
+    const actualEmployees = createdEmployees.filter(emp => emp.role === 'employee')
     const additionalRequests = 300
     for (let i = 0; i < additionalRequests; i++) {
-      const randomEmployee = createdEmployees[Math.floor(Math.random() * createdEmployees.length)]
+      const randomEmployee = actualEmployees[Math.floor(Math.random() * actualEmployees.length)]
       const leaveType = leaveTypes[Math.floor(Math.random() * leaveTypes.length)]
       const totalDays = Math.floor(Math.random() * 5) + 1 // 1-5 days
       

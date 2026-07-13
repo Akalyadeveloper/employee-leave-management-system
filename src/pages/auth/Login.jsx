@@ -103,8 +103,8 @@ const Login = () => {
           </Link>
 
           <div className="auth-footer">
-            <p className="auth-footer__text">Demo credentials:</p>
-            <p className="auth-footer__demo">Email: employee@test.com | Pass: 123456</p>
+            <p className="auth-footer__text">Demo credentials (password: 123456):</p>
+            <p className="auth-footer__demo">Employee: employee@test.com | Manager: manager@test.com</p>
           </div>
         </div>
 
