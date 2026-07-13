@@ -29,6 +29,12 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
 }
 
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: 'Employee Leave Management API ready' })
+})
+
+app.get('/favicon.ico', (req, res) => res.status(204).end())
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString() })
 })
