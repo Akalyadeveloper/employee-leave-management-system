@@ -388,3 +388,53 @@ This project is created for educational purposes.
 
 ## Security Note
 Environment files (.env) removed from version control for security. See .env.example for required variables.
+---
+
+## 🏗 Architecture
+
+This project follows a standard **client-server architecture** with a clear separation between the frontend, backend, and database layers.
+
+```
+┌─────────────────┐        HTTPS/REST        ┌──────────────────┐        Mongoose ODM       ┌───────────────┐
+│   React Frontend │ ───────────────────────> │  Express Backend  │ ─────────────────────────> │  MongoDB Atlas │
+│   (Vite + Zustand)│ <─────────────────────── │   (Node.js API)   │ <───────────────────────── │   (Database)   │
+└─────────────────┘        JSON responses      └──────────────────┘        Query results        └───────────────┘
+```
+
+**Flow:**
+1. The **React frontend** (built with Vite) renders the UI and manages client-side state using **Zustand**.
+2. User actions (login, apply leave, approve/reject) trigger calls through a centralized `api/client.js` module, which sends `fetch` requests to the backend's REST API (`VITE_API_BASE_URL`).
+3. The **Express backend** validates requests, applies JWT-based authentication middleware, and routes them to the appropriate controller (`auth`, `leave`, `dashboard`).
+4. Controllers interact with **MongoDB Atlas** via **Mongoose** models (`User`, `LeaveRequest`) to read/write data.
+5. Responses flow back through the same path, and the frontend updates its Zustand store, re-rendering the relevant components (dashboard stats, charts, request lists).
+
+**Key design decisions:**
+- **JWT stored in HTTP-only cookies** for authentication, with `credentials: 'include'` on all frontend requests.
+- **CORS** is restricted to the configured `CLIENT_URL`, with an allowance for local development origins.
+- **Demo mode fallback**: if the MongoDB connection fails, the backend automatically starts in an in-memory demo mode so the app remains usable for local testing/evaluation.
+
+---
+
+## 🤖 AI Usage
+
+AI assistance (Claude, by Anthropic) was used during the development of this project in the following ways:
+
+- **Debugging**: Diagnosing and fixing a "Failed to fetch" login error, which was traced back to the backend server not running, a missing MongoDB IP whitelist entry, and a git author-identity misconfiguration.
+- **Environment & deployment troubleshooting**: Guidance on `.env` file setup, MongoDB Atlas network access configuration, and resolving `nodemon`/dependency installation issues.
+- **Git workflow support**: Assistance with fixing git commit author history, setting up a feature branch, and creating a pull request to satisfy branching best practices.
+- **Documentation**: Help structuring and writing sections of this README (Architecture, AI Usage, Assumptions).
+
+All application logic, UI design, and core feature implementation were reviewed and understood by the developer; AI was used as a debugging and productivity aid rather than to blindly generate the entire codebase.
+
+---
+
+## 📌 Assumptions
+
+The following assumptions were made during development:
+
+- Each user has a **single role** — either `employee` or `manager` — assigned at registration; there is no multi-role or role-switching support.
+- **Leave balances** are seeded with fixed defaults (Sick: 10, Casual: 5, Vacation: 5 days) and reset manually rather than on an annual cycle.
+- A **manager can approve/reject requests from any employee** — there is no team/department-based scoping of managers to specific employees.
+- The system assumes a **single organization** context; there is no multi-tenancy support.
+- **Weekends and holidays** are not automatically excluded from leave day calculations — `totalDays` is calculated as the inclusive date range between `startDate` and `endDate`.
+- MongoDB Atlas is used as the database; if the connection is unavailable, the backend falls back to an **in-memory demo mode** for local development/testing convenience, not for production use.
