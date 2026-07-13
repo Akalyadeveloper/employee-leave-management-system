@@ -2148,21 +2148,26 @@ html {
   min-height: 100vh;
   background: var(--bg-primary);
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .home-header {
   background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
   border-bottom: 1px solid var(--border-color);
-  padding-bottom: 1rem;
+  padding-bottom: 0;
+  flex-shrink: 0;
 }
 
 .home-nav {
   max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
-  padding: 1.2rem 2rem;
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 2rem;
 }
 
 .home-logo {
@@ -2210,9 +2215,10 @@ html {
 .home-hero {
   position: relative;
   overflow: hidden;
-  padding: 4rem 2rem;
+  padding: 3rem 2rem;
   max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .home-hero__background {
@@ -2263,11 +2269,11 @@ html {
 }
 
 .home-hero__title {
-  font-size: 3.5rem;
+  font-size: 3.2rem;
   font-weight: 900;
   line-height: 1.2;
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   animation: slideInDown 0.8s ease-out;
 }
 
@@ -2279,26 +2285,26 @@ html {
 }
 
 .home-hero__subtitle {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   color: var(--text-secondary);
   max-width: 600px;
-  margin: 0 auto 2.5rem;
-  line-height: 1.8;
+  margin: 0 auto 2rem;
+  line-height: 1.7;
   animation: slideInUp 0.8s ease-out 0.2s backwards;
 }
 
 .home-hero__buttons {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.2rem;
   justify-content: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
   flex-wrap: wrap;
   animation: slideInUp 0.8s ease-out 0.4s backwards;
 }
 
 .btn--large {
-  padding: 1.1rem 2.5rem;
-  font-size: 1.05rem;
+  padding: 1rem 2.2rem;
+  font-size: 1rem;
   font-weight: 700;
   border-radius: var(--radius-xl);
   transition: all var(--transition-base);
@@ -2319,8 +2325,8 @@ html {
 .home-hero__stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  padding-top: 2rem;
+  gap: 1.5rem;
+  padding-top: 1.5rem;
   border-top: 1px solid var(--border-color);
   animation: slideInUp 0.8s ease-out 0.6s backwards;
 }
@@ -2349,32 +2355,33 @@ html {
 
 /* Features Section */
 .home-features {
-  padding: 5rem 2rem;
+  padding: 4rem 2rem;
   background: linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, rgba(59, 130, 246, 0.03) 100%);
+  flex: 1;
 }
 
 .section-header {
   text-align: center;
-  margin-bottom: 3.5rem;
+  margin-bottom: 3rem;
   animation: fadeInUp 0.8s ease-out;
 }
 
 .section-header h2 {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: 900;
   color: var(--text-primary);
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.6rem;
 }
 
 .section-header p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-secondary);
 }
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.8rem;
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -2383,11 +2390,13 @@ html {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-xl);
-  padding: 2rem;
+  padding: 1.8rem;
   transition: all var(--transition-base);
   animation: fadeInUp 0.8s ease-out;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .feature-card::before {
@@ -2413,24 +2422,24 @@ html {
 }
 
 .feature-icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: 2.2rem;
+  margin-bottom: 0.8rem;
   display: inline-block;
   animation: scaleIn 0.6s ease-out;
 }
 
 .feature-card h3 {
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.6rem;
 }
 
 .feature-card p {
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
 }
 
 .feature-list {
@@ -2439,17 +2448,18 @@ html {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.4rem;
+  margin-top: auto;
 }
 
 .feature-list li {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
 }
 
 /* Benefits Section */
 .home-benefits {
-  padding: 5rem 2rem;
+  padding: 4rem 2rem;
 }
 
 .benefits-grid {
@@ -2472,37 +2482,37 @@ html {
 .benefit-item:nth-child(4) { animation-delay: 0.3s; }
 
 .benefit-number {
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   background: var(--accent-gradient);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 900;
-  margin: 0 auto 1.5rem;
+  margin: 0 auto 1.2rem;
   box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
 }
 
 .benefit-item h3 {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.6rem;
 }
 
 .benefit-item p {
   color: var(--text-secondary);
-  line-height: 1.6;
-  font-size: 0.95rem;
+  line-height: 1.5;
+  font-size: 0.9rem;
 }
 
 /* CTA Section */
 .home-cta {
   position: relative;
-  padding: 4rem 2rem;
+  padding: 3.5rem 2rem;
   text-align: center;
   overflow: hidden;
 }
@@ -2547,22 +2557,22 @@ html {
 }
 
 .cta-content h2 {
-  font-size: 2.25rem;
+  font-size: 2rem;
   font-weight: 900;
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .cta-content p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-secondary);
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
   line-height: 1.6;
 }
 
 .cta-buttons {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.2rem;
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -2571,22 +2581,23 @@ html {
 .home-footer {
   background: var(--bg-secondary);
   border-top: 1px solid var(--border-color);
-  padding: 3rem 2rem 1.5rem;
+  padding: 2.5rem 2rem 1.2rem;
+  flex-shrink: 0;
 }
 
 .footer-content {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 2rem;
+  gap: 1.5rem;
   max-width: 1400px;
-  margin: 0 auto 2rem;
+  margin: 0 auto 1.5rem;
 }
 
 .footer-section h4 {
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
 }
 
 .footer-section ul {
@@ -2684,37 +2695,53 @@ html {
   }
 
   .home-hero__title {
-    font-size: 2.5rem;
+    font-size: 2.3rem;
   }
 
   .home-hero__subtitle {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 
   .home-hero__buttons {
-    flex-direction: column;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
+    flex-direction: row;
   }
 
-  .btn--large {
-    width: 100%;
-    text-align: center;
+  .section-header h2 {
+    font-size: 2rem;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .auth-card {
-    padding: 2rem;
+    padding: 1.8rem;
   }
 
   .auth-header h2 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 
   .auth-side-card {
     padding: 1.2rem;
+  }
+
+  .home-nav {
+    padding: 0.8rem 1.5rem;
+  }
+
+  .home-nav__buttons {
+    gap: 0.8rem;
+  }
+
+  .home-logo {
+    font-size: 1.25rem;
   }
 
   .home-hero {
@@ -2722,42 +2749,89 @@ html {
   }
 
   .home-hero__title {
-    font-size: 2rem;
+    font-size: 1.9rem;
+    margin-bottom: 0.6rem;
   }
 
   .home-hero__subtitle {
     font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .home-hero__buttons {
+    margin-bottom: 2rem;
   }
 
   .home-hero__stats {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-header p {
+    font-size: 0.95rem;
+  }
+
+  .home-features {
+    padding: 3rem 1.5rem;
   }
 
   .features-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
   .feature-card {
     padding: 1.5rem;
   }
 
-  .home-nav__buttons {
-    gap: 0.5rem;
+  .home-benefits {
+    padding: 3rem 1.5rem;
   }
 
-  .btn--nav {
-    padding: 0.6rem 1rem;
-    font-size: 0.9rem;
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-cta {
+    padding: 2.5rem 1.5rem;
   }
 
   .cta-content h2 {
-    font-size: 1.75rem;
+    font-size: 1.7rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .cta-content p {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+  }
+
+  .btn--large {
+    width: 100%;
+  }
+
+  .home-footer {
+    padding: 2rem 1.5rem 1rem;
   }
 
   .footer-content {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .footer-section h4 {
+    margin-bottom: 0.6rem;
+    font-size: 0.85rem;
   }
 }
 
@@ -2767,20 +2841,28 @@ html {
   }
 
   .home-nav {
-    padding: 1rem 1.5rem;
+    padding: 0.8rem 1rem;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   .home-logo {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+  }
+
+  .home-logo__icon {
+    font-size: 1.6rem;
   }
 
   .home-nav__buttons {
-    gap: 0.3rem;
+    width: 100%;
+    gap: 0.6rem;
   }
 
   .btn--nav {
-    padding: 0.5rem 0.8rem;
-    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    flex: 1;
   }
 
   .home-hero {
@@ -2789,19 +2871,139 @@ html {
 
   .home-hero__title {
     font-size: 1.5rem;
+    margin-bottom: 0.5rem;
   }
 
   .home-hero__subtitle {
     font-size: 0.95rem;
+    margin-bottom: 1.2rem;
   }
 
   .home-hero__buttons {
     gap: 0.8rem;
+    margin-bottom: 1.5rem;
+    flex-direction: column;
   }
 
   .btn--large {
     padding: 0.9rem 1.8rem;
     font-size: 0.95rem;
+    width: 100%;
+  }
+
+  .home-hero__stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding-top: 1rem;
+  }
+
+  .home-stat__number {
+    font-size: 1.6rem;
+  }
+
+  .home-stat__label {
+    font-size: 0.8rem;
+  }
+
+  .home-features {
+    padding: 2rem 1rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .section-header p {
+    font-size: 0.9rem;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .feature-card {
+    padding: 1.3rem;
+  }
+
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .feature-card h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-card p {
+    font-size: 0.85rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .feature-list li {
+    font-size: 0.8rem;
+  }
+
+  .home-benefits {
+    padding: 2rem 1rem;
+  }
+
+  .benefits-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .benefit-item h3 {
+    font-size: 1rem;
+  }
+
+  .benefit-item p {
+    font-size: 0.85rem;
+  }
+
+  .home-cta {
+    padding: 2rem 1rem;
+  }
+
+  .cta-content h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-content p {
+    font-size: 0.9rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .cta-buttons {
+    gap: 0.8rem;
+    flex-direction: column;
+  }
+
+  .home-footer {
+    padding: 1.5rem 1rem 0.8rem;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .footer-section h4 {
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .footer-section a {
+    font-size: 0.8rem;
+  }
+
+  .footer-bottom {
+    padding-top: 1rem;
+    font-size: 0.75rem;
   }
 
   .auth-card {
@@ -2811,7 +3013,7 @@ html {
   }
 
   .auth-header h2 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
 
   .form-group {
@@ -2824,14 +3026,9 @@ html {
     font-size: 0.9rem;
   }
 
-  .features-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .footer-content {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  .btn--auth {
+    padding: 0.9rem 1.5rem;
+    font-size: 0.95rem;
   }
 }
 
