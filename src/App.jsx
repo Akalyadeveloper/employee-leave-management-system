@@ -20,7 +20,7 @@ const HomeRouter = () => {
   if (user?.role === 'manager') {
     return <Navigate to="/manager" replace />
   }
-  return <EmployeeDashboard />
+  return <Navigate to="/dashboard" replace />
 }
 
 const App = () => {
@@ -62,6 +62,14 @@ const App = () => {
           }
         >
           <Route index element={<HomeRouter />} />
+          <Route
+            path="dashboard"
+            element={
+              <ProtectedRoute allowed={['employee']}>
+                <EmployeeDashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="apply"
             element={

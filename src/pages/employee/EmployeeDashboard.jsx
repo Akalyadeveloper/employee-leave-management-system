@@ -1,28 +1,50 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import StatsGrid from '../../components/StatsGrid.jsx'
 import { api } from '../../api/client.js'
 import { formatDate } from '../../utils/format.js'
+import logger from '../../utils/logger.js'
+
+const REFRESH_INTERVAL = 10000 // 10 seconds
 
 const EmployeeDashboard = () => {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
+  const loadData = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true)
+    setError('')
+    try {
+      const response = await api.get('/dashboard/employee')
+      setData(response)
+      logger.debug('Dashboard', 'Employee data refreshed')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true)
-      setError('')
-      try {
-        const response = await api.get('/dashboard/employee')
-        setData(response)
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
+    loadData()
+    
+    // Auto-refresh every 10 seconds
+    const interval = setInterval(() => loadData(true), REFRESH_INTERVAL)
+    
+    // Also refresh when tab becomes visible
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        logger.debug('Dashboard', 'Tab visible - refreshing')
+        loadData(true)
       }
     }
-    loadData()
-  }, [])
+    document.addEventListener('visibilitychange', handleVisibility)
+    
+    return () => {
+      clearInterval(interval)
+      document.removeEventListener('visibilitychange', handleVisibility)
+    }
+  }, [loadData])
 
   if (loading) return <p>Loading dashboard...</p>
   if (error) return <p className="form__error">{error}</p>

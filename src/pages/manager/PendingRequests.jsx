@@ -1,14 +1,41 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import LeaveTable from '../../components/LeaveTable.jsx'
 import useLeaveStore from '../../store/leaveStore.js'
+import logger from '../../utils/logger.js'
+
+const REFRESH_INTERVAL = 10000 // 10 seconds
 
 const PendingRequests = () => {
   const { pendingRequests, fetchPendingRequests, approveRequest, rejectRequest, loading } = useLeaveStore()
   const [error, setError] = useState('')
 
-  useEffect(() => {
+  const loadData = useCallback(() => {
     fetchPendingRequests()
   }, [fetchPendingRequests])
+
+  useEffect(() => {
+    loadData()
+    
+    // Auto-refresh every 10 seconds
+    const interval = setInterval(() => {
+      logger.debug('Pending', 'Auto-refreshing pending requests')
+      loadData()
+    }, REFRESH_INTERVAL)
+    
+    // Also refresh when tab becomes visible
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        logger.debug('Pending', 'Tab visible - refreshing')
+        loadData()
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    
+    return () => {
+      clearInterval(interval)
+      document.removeEventListener('visibilitychange', handleVisibility)
+    }
+  }, [loadData])
 
   const handleApprove = async (id) => {
     setError('')

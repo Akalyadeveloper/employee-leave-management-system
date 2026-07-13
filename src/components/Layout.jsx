@@ -3,7 +3,7 @@ import useAuthStore from '../store/authStore'
 
 const NAV_LINKS = {
   employee: [
-    { to: '/', label: 'Dashboard' },
+    { to: '/dashboard', label: 'Dashboard' },
     { to: '/apply', label: 'Apply Leave' },
     { to: '/my-requests', label: 'My Requests' },
     { to: '/profile', label: 'Profile' },
