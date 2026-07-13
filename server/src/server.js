@@ -45,7 +45,7 @@ const startServer = async () => {
   app.listen(PORT, () => console.log(`API ready on port ${PORT}`))
 }
 
-// Only start server if not in Vercel serverless environment
+// Only start server locally, not in Vercel
 if (process.env.VERCEL === undefined) {
   startServer()
 }
