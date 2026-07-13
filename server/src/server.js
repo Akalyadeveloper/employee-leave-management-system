@@ -15,13 +15,26 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 5000
 
+// Set production mode on Vercel
+if (process.env.VERCEL) {
+  process.env.NODE_ENV = 'production'
+}
+
 const allowedOrigins = process.env.CLIENT_URL?.split(',').map((url) => url.trim()) || ['http://localhost:5173']
 
 logger.info('Server', 'Initializing server', { allowedOrigins, nodeEnv: process.env.NODE_ENV })
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, curl, etc)
+      if (!origin) return callback(null, true)
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true)
+      }
+      logger.warn('CORS', 'Blocked origin', { origin })
+      return callback(new Error('Not allowed by CORS'))
+    },
     credentials: true,
   }),
 )

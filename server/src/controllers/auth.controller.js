@@ -5,9 +5,10 @@ import { validate, registerSchema, loginSchema } from '../utils/validators.js'
 import { DEFAULT_LEAVE_BALANCE } from '../utils/constants.js'
 import logger from '../utils/logger.js'
 
+// For cross-domain cookies (frontend and backend on different domains)
 const cookieConfig = {
   httpOnly: true,
-  sameSite: 'lax',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   secure: process.env.NODE_ENV === 'production',
   maxAge: 7 * 24 * 60 * 60 * 1000,
 }
