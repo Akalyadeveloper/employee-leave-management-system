@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
-import LeaveTable from '../../components/LeaveTable.jsx'
+import LeaveCard from '../../components/LeaveCard.jsx'
 import useLeaveStore from '../../store/leaveStore.js'
 import logger from '../../utils/logger.js'
 
@@ -39,7 +39,7 @@ const PendingRequests = () => {
 
   const handleApprove = async (id) => {
     setError('')
-    const comment = window.prompt('Add an optional comment for the employee', '') || ''
+    const comment = window.prompt('Add an optional comment for the employee:', 'Approved. Have a good break!') || ''
     try {
       await approveRequest(id, comment)
     } catch (err) {
@@ -49,7 +49,11 @@ const PendingRequests = () => {
 
   const handleReject = async (id) => {
     setError('')
-    const comment = window.prompt('Reason for rejection', '') || ''
+    const comment = window.prompt('Reason for rejection (required):', '')
+    if (!comment) {
+      setError('Please provide a reason for rejection')
+      return
+    }
     try {
       await rejectRequest(id, comment)
     } catch (err) {
@@ -58,14 +62,31 @@ const PendingRequests = () => {
   }
 
   return (
-    <section className="card">
-      <div className="card__header">
-        <h3>Pending approvals</h3>
-        {loading && <span className="badge">Working...</span>}
-      </div>
-      {error && <p className="form__error">{error}</p>}
-      <LeaveTable requests={pendingRequests} onApprove={handleApprove} onReject={handleReject} />
-    </section>
+    <div className="stack">
+      <section className="card">
+        <div className="card__header">
+          <h3>⏳ Pending Approvals ({pendingRequests.length})</h3>
+          {loading && <span className="badge badge--pending">Refreshing...</span>}
+        </div>
+        {error && <p className="form__error">{error}</p>}
+        
+        {pendingRequests.length ? (
+          <div className="leave-cards-grid">
+            {pendingRequests.map((request) => (
+              <LeaveCard 
+                key={request._id} 
+                request={request} 
+                showEmployee
+                onApprove={handleApprove}
+                onReject={handleReject}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="empty-state">🎉 All caught up! No pending requests to review.</p>
+        )}
+      </section>
+    </div>
   )
 }
 

@@ -1,90 +1,278 @@
-# Employee Leave Management System – Build Plan
+# 🏗️ System Architecture
 
-This document keeps the plan short and beginner friendly so you can follow every step without stress.
+This document describes the architecture of the Employee Leave Management System.
 
-## 1. Overall Idea
-- The app is split into a **frontend** (React + Zustand + Vite) and a **backend** (Node.js + Express + MongoDB via Mongoose).
-- Users sign up or log in. Each user is either an **Employee** or a **Manager**.
-- Employees create leave requests. Managers review the pending requests and approve or reject them.
+---
 
-## 2. Tech Choices (plain language)
-| Layer | Tool | Simple reason |
-| --- | --- | --- |
-| Frontend | React 19 + Vite | Fast, component based UI with easy dev server |
-| State | Zustand | Tiny store, single file, no boilerplate |
-| Styling | CSS modules via simple `.css` files | Keeps focus on layout without extra libs |
-| Data fetching | Lightweight `fetch` helpers | Fewer dependencies |
-| Backend | Express | Minimal HTTP server |
-| Database | MongoDB Atlas (URI in txt) | Document DB fits flexible leave records |
-| ORM | Mongoose | Schema validation + helpers |
-| Auth | JWT stored in HTTP-only cookies | Simple stateless sessions |
-| Validation | Zod | Declarative schemas re-used on both sides |
+## 📊 System Overview
 
-## 3. Data Models
-### User
-```ts
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        CLIENT                                │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
+│  │   React     │  │   Zustand   │  │     Recharts        │  │
+│  │   Router    │  │   Store     │  │     (Charts)        │  │
+│  └─────────────┘  └─────────────┘  └─────────────────────┘  │
+│                          │                                   │
+│                    API Client (fetch)                        │
+└─────────────────────────────────────────────────────────────┘
+                           │
+                     HTTPS + Cookies
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│                        SERVER                                │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
+│  │   Express   │  │    JWT      │  │     Mongoose        │  │
+│  │   Routes    │  │    Auth     │  │     (ODM)           │  │
+│  └─────────────┘  └─────────────┘  └─────────────────────┘  │
+│                          │                                   │
+│                    Zod Validation                            │
+└─────────────────────────────────────────────────────────────┘
+                           │
+                      MongoDB Driver
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    MongoDB Atlas                             │
+│  ┌─────────────────┐  ┌────────────────────────────────┐    │
+│  │     Users       │  │       LeaveRequests            │    │
+│  └─────────────────┘  └────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🎯 Core Concepts
+
+### User Roles
+| Role | Description | Capabilities |
+|------|-------------|--------------|
+| **Employee** | Regular staff member | Apply, view, cancel leaves |
+| **Manager** | Team supervisor | Approve, reject, view all leaves |
+
+### Leave Types
+| Type | Default Balance | Description |
+|------|-----------------|-------------|
+| **Sick** | 10 days | Medical/health related |
+| **Casual** | 5 days | Personal errands |
+| **Vacation** | 5 days | Planned time off |
+
+### Leave Status Flow
+```
+┌──────────┐    Apply     ┌──────────┐
+│  (new)   │ ───────────► │ Pending  │
+└──────────┘              └──────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              │                │                │
+              ▼                ▼                ▼
+        ┌──────────┐    ┌──────────┐    ┌──────────┐
+        │ Approved │    │ Rejected │    │ Cancelled│
+        └──────────┘    └──────────┘    └──────────┘
+```
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+| Layer | Tool | Purpose |
+|-------|------|---------|
+| UI Framework | React 19 + Vite | Fast component-based UI |
+| State Management | Zustand | Lightweight global state |
+| Routing | React Router v6 | Client-side navigation |
+| Charts | Recharts | Data visualization |
+| Styling | CSS Variables + Modules | Theming and scoped styles |
+| API Client | Fetch with credentials | HTTP requests with cookies |
+
+### Backend
+| Layer | Tool | Purpose |
+|-------|------|---------|
+| Framework | Express 5 | HTTP server |
+| Database | MongoDB + Mongoose 9 | Document storage + ODM |
+| Authentication | JWT + HTTP-only Cookies | Stateless sessions |
+| Validation | Zod | Request/response schemas |
+| Password | bcryptjs | Secure hashing |
+
+---
+
+## 📦 Data Models
+
+### User Schema
+```javascript
 {
-  name: string,
-  email: string,
-  password: string (hashed),
+  _id: ObjectId,
+  name: String,              // 2-50 characters
+  email: String,             // unique, valid email
+  password: String,          // bcrypt hashed
   role: 'employee' | 'manager',
   leaveBalance: {
-    sick: number,
-    casual: number,
-    vacation: number
+    sick: Number,            // default: 10
+    casual: Number,          // default: 5
+    vacation: Number         // default: 5
   },
-  createdAt: Date
+  createdAt: Date,
+  updatedAt: Date
 }
 ```
 
-### LeaveRequest
-```ts
+### LeaveRequest Schema
+```javascript
 {
-  user: ObjectId (ref User),
+  _id: ObjectId,
+  user: ObjectId,            // ref: User
   leaveType: 'sick' | 'casual' | 'vacation',
   startDate: Date,
   endDate: Date,
-  totalDays: number,
-  reason: string,
+  totalDays: Number,         // calculated
+  reason: String,            // 10-500 characters
   status: 'pending' | 'approved' | 'rejected',
-  managerComment?: string,
-  createdAt: Date
+  managerComment: String,    // optional
+  createdAt: Date,
+  updatedAt: Date
 }
 ```
 
-## 4. REST API Checklist
-| Area | Endpoint | Purpose |
-| --- | --- | --- |
-| Auth | `POST /api/auth/register` | Create employee or manager |
-|  | `POST /api/auth/login` | Returns JWT cookie + profile |
-|  | `GET /api/auth/me` | Returns profile + balance |
-| Employee Leaves | `POST /api/leaves` | Submit new request |
-|  | `GET /api/leaves/my-requests` | List own requests |
-|  | `DELETE /api/leaves/:id` | Cancel pending request |
-|  | `GET /api/leaves/balance` | Current leave counters |
-| Manager Leaves | `GET /api/leaves/all` | All requests |
-|  | `GET /api/leaves/pending` | Pending queue |
-|  | `PUT /api/leaves/:id/approve` | Approve |
-|  | `PUT /api/leaves/:id/reject` | Reject with note |
-| Dashboard | `GET /api/dashboard/employee` | Approved/pending totals, used days |
-|  | `GET /api/dashboard/manager` | Team stats |
+---
 
-## 5. Frontend Pages
-1. **Public**: Login, Register.
-2. **Employee** (protected): Dashboard, Apply Leave, My Requests, Profile.
-3. **Manager** (protected): Dashboard, Pending Requests, All Requests.
+## 🔐 Authentication Flow
 
-Each page uses shared UI pieces: header, sidebar, cards, tables.
+```
+┌────────┐         ┌────────┐         ┌────────┐
+│ Client │         │ Server │         │   DB   │
+└───┬────┘         └───┬────┘         └───┬────┘
+    │                  │                  │
+    │  POST /login     │                  │
+    │ ────────────────►│                  │
+    │                  │  Find user       │
+    │                  │ ────────────────►│
+    │                  │  User data       │
+    │                  │ ◄────────────────│
+    │                  │                  │
+    │                  │  Verify password │
+    │                  │  Generate JWT    │
+    │                  │                  │
+    │  Set-Cookie: JWT │                  │
+    │ ◄────────────────│                  │
+    │                  │                  │
+    │  Subsequent requests               │
+    │  (Cookie: JWT)   │                  │
+    │ ────────────────►│                  │
+    │                  │  Verify JWT      │
+    │                  │  Extract user    │
+    │                  │                  │
+```
 
-## 6. State Flow (Zustand)
-- `authStore` keeps `user`, `tokenReady`, and simple helpers (`login`, `logout`, `loadProfile`).
-- `leaveStore` caches requests + balances per role.
-- Stores call the fetch helper which already attaches credentials.
+### Security Features
+- ✅ HTTP-only cookies (prevents XSS token theft)
+- ✅ Secure flag in production
+- ✅ SameSite=None for cross-origin (Vercel)
+- ✅ Password hashing with bcrypt
+- ✅ Input validation with Zod
 
-## 7. Simple Delivery Steps
-1. **Backend first**: build Express server, connect to MongoDB, add routes + validation + auth middleware.
-2. **Frontend**: scaffold pages, build auth flow, wire employee actions, then manager actions.
-3. **Docs**: add README, `.env.example`, and screenshots/gifs once UI ready.
-4. **Testing**: run `npm run dev` (frontend) + `npm run server` (backend) + sample API calls via Thunder Client/Postman.
+---
 
-This plan mirrors the instructions from `public/Employee Leave Management System.txt` so every evaluation point is covered.
+## 📁 Project Structure
+
+### Frontend (`src/`)
+```
+src/
+├── api/           # API client wrapper
+├── components/    # Reusable UI components
+│   ├── charts/    # Recharts components
+│   └── ...
+├── pages/         # Route components
+│   ├── auth/      # Login, Register
+│   ├── employee/  # Employee pages
+│   └── manager/   # Manager pages
+├── store/         # Zustand stores
+├── ui/            # Theme system
+└── utils/         # Helper functions
+```
+
+### Backend (`server/src/`)
+```
+server/src/
+├── config/        # Database connection
+├── controllers/   # Route handlers
+├── middleware/    # Auth, error handling
+├── models/        # Mongoose schemas
+├── routes/        # Express routes
+├── scripts/       # Database seeding
+└── utils/         # Helpers, validators
+```
+
+---
+
+## 🔄 State Management
+
+### Zustand Stores
+
+**authStore**
+- `user` - Current user object
+- `isAuthenticated` - Boolean flag
+- `login()` - Authenticate user
+- `logout()` - Clear session
+- `checkAuth()` - Verify existing session
+
+**leaveStore**
+- `requests` - Leave request list
+- `balance` - Leave balance object
+- `fetchRequests()` - Load requests
+- `applyLeave()` - Submit new request
+- `cancelRequest()` - Remove pending request
+
+---
+
+## 🌐 API Design
+
+### REST Conventions
+- Resources: `/api/leaves`, `/api/auth`
+- Actions: GET (read), POST (create), PUT (update), DELETE (remove)
+- Responses: `{ success: boolean, data?: any, message?: string }`
+
+### Error Handling
+- 400: Validation errors
+- 401: Authentication required
+- 403: Forbidden (wrong role)
+- 404: Resource not found
+- 500: Server error
+
+---
+
+## 📈 Performance Considerations
+
+### Frontend
+- Vite for fast HMR and builds
+- Lazy loading for routes (future)
+- Auto-refresh every 10 seconds for real-time updates
+
+### Backend
+- MongoDB indexes on `user` and `status` fields
+- Connection pooling via Mongoose
+- Serverless-ready for Vercel deployment
+
+---
+
+## 🚀 Deployment Architecture
+
+```
+┌─────────────────┐         ┌─────────────────┐
+│   Vercel CDN    │         │   Vercel Edge   │
+│   (Frontend)    │ ◄─────► │   (Backend)     │
+└─────────────────┘         └─────────────────┘
+                                    │
+                                    ▼
+                            ┌─────────────────┐
+                            │  MongoDB Atlas  │
+                            │   (Database)    │
+                            └─────────────────┘
+```
+
+### Deployment Considerations
+- Frontend: Static assets on Vercel CDN
+- Backend: Serverless functions on Vercel
+- Database: MongoDB Atlas (cloud-hosted)
+- CORS: Configured for cross-origin cookies
+

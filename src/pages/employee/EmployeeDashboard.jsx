@@ -1,5 +1,9 @@
 import { useEffect, useState, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import StatsGrid from '../../components/StatsGrid.jsx'
+import LeaveCard from '../../components/LeaveCard.jsx'
+import LeaveStatusChart from '../../components/charts/LeaveStatusChart.jsx'
+import LeaveBalanceChart from '../../components/charts/LeaveBalanceChart.jsx'
 import { api } from '../../api/client.js'
 import { formatDate } from '../../utils/format.js'
 import logger from '../../utils/logger.js'
@@ -60,30 +64,52 @@ const EmployeeDashboard = () => {
   return (
     <div className="stack">
       <StatsGrid items={statItems} />
+
+      {/* Charts Section */}
+      <div className="charts-grid">
+        <div className="chart-card">
+          <h4 className="chart-card__title">📊 Request Status</h4>
+          <LeaveStatusChart data={data.statusCounts} />
+        </div>
+        <div className="chart-card">
+          <h4 className="chart-card__title">📅 Leave Balance</h4>
+          <LeaveBalanceChart data={data.balance} />
+        </div>
+      </div>
+
+      {/* Recent Decisions Section */}
       <section className="card">
-        <h3>Upcoming leaves</h3>
-        {data.upcoming?.length ? (
-          <ul className="upcoming-list">
-            {data.upcoming.map((item) => (
-              <li key={item._id}>
-                <strong>{formatDate(item.startDate)}</strong> - {formatDate(item.endDate)} ({item.leaveType})
-              </li>
+        <div className="section-header">
+          <h3>📋 Recent Decisions</h3>
+          <Link to="/my-requests" className="section-header__link">
+            View all requests →
+          </Link>
+        </div>
+        {data.recentDecisions?.length ? (
+          <div className="leave-cards-grid">
+            {data.recentDecisions.map((request) => (
+              <LeaveCard key={request._id} request={request} />
             ))}
-          </ul>
+          </div>
         ) : (
-          <p className="empty-state">No upcoming leaves.</p>
+          <p className="empty-state">No decisions yet. Your pending requests will appear here once reviewed.</p>
         )}
       </section>
+
+      {/* Upcoming Leaves Section */}
       <section className="card">
-        <h3>Leave balance</h3>
-        <div className="balance-grid">
-          {Object.entries(data.balance).map(([type, value]) => (
-            <div key={type} className="balance-card">
-              <p className="balance-card__label">{type}</p>
-              <p className="balance-card__value">{value} days</p>
-            </div>
-          ))}
+        <div className="section-header">
+          <h3>🗓️ Upcoming Approved Leaves</h3>
         </div>
+        {data.upcoming?.length ? (
+          <div className="leave-cards-grid">
+            {data.upcoming.map((request) => (
+              <LeaveCard key={request._id} request={request} />
+            ))}
+          </div>
+        ) : (
+          <p className="empty-state">No upcoming leaves scheduled.</p>
+        )}
       </section>
     </div>
   )

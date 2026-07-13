@@ -1,5 +1,9 @@
 import { useEffect, useState, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import StatsGrid from '../../components/StatsGrid.jsx'
+import LeaveCard from '../../components/LeaveCard.jsx'
+import LeaveStatusChart from '../../components/charts/LeaveStatusChart.jsx'
+import LeavesTrendChart from '../../components/charts/LeavesTrendChart.jsx'
 import { api } from '../../api/client.js'
 import { formatDate } from '../../utils/format.js'
 import logger from '../../utils/logger.js'
@@ -51,26 +55,69 @@ const ManagerDashboard = () => {
   if (!data) return null
 
   const items = [
-    { label: 'Pending', value: data.pendingCount },
+    { label: 'Pending Requests', value: data.pendingCount },
     { label: 'Approved', value: data.approvedCount },
-    { label: 'Employees', value: data.employeeCount },
+    { label: 'Rejected', value: data.rejectedCount },
+    { label: 'Total Employees', value: data.employeeCount },
   ]
+
+  const statusChartData = {
+    pending: data.pendingCount,
+    approved: data.approvedCount,
+    rejected: data.rejectedCount,
+  }
 
   return (
     <div className="stack">
       <StatsGrid items={items} />
+
+      {/* Charts Section */}
+      <div className="charts-grid">
+        <div className="chart-card">
+          <h4 className="chart-card__title">📊 Overall Request Status</h4>
+          <LeaveStatusChart data={statusChartData} />
+        </div>
+        <div className="chart-card">
+          <h4 className="chart-card__title">📈 Request Trends</h4>
+          <LeavesTrendChart data={[...data.recentDecisions, ...data.pendingRequests]} />
+        </div>
+      </div>
+
+      {/* Pending Requests Section */}
       <section className="card">
-        <h3>Latest decisions</h3>
-        {data.recent?.length ? (
-          <ul className="upcoming-list">
-            {data.recent.map((item) => (
-              <li key={item._id}>
-                <strong>{item.user?.name}</strong> - {item.leaveType} leave ({formatDate(item.startDate)})
-              </li>
+        <div className="section-header">
+          <h3>⏳ Pending Requests</h3>
+          <Link to="/manager/pending" className="section-header__link">
+            View all pending →
+          </Link>
+        </div>
+        {data.pendingRequests?.length ? (
+          <div className="leave-cards-grid">
+            {data.pendingRequests.map((request) => (
+              <LeaveCard key={request._id} request={request} showEmployee />
             ))}
-          </ul>
+          </div>
         ) : (
-          <p className="empty-state">No requests yet.</p>
+          <p className="empty-state">🎉 No pending requests! All caught up.</p>
+        )}
+      </section>
+
+      {/* Recent Decisions Section */}
+      <section className="card">
+        <div className="section-header">
+          <h3>📋 Recent Decisions</h3>
+          <Link to="/manager/requests" className="section-header__link">
+            View all requests →
+          </Link>
+        </div>
+        {data.recentDecisions?.length ? (
+          <div className="leave-cards-grid">
+            {data.recentDecisions.map((request) => (
+              <LeaveCard key={request._id} request={request} showEmployee />
+            ))}
+          </div>
+        ) : (
+          <p className="empty-state">No decisions made yet.</p>
         )}
       </section>
     </div>

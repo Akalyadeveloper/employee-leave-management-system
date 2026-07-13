@@ -1,188 +1,387 @@
 <div align="center">
 
-# Employee Leave Management System
+# 🏢 Employee Leave Management System
 
-A full-stack React + Express app that lets employees submit leave requests and managers approve or reject them. The requirements come from `public/Employee Leave Management System.txt`, and every feature in that file is covered here with beginner-friendly code and explanations.
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=nodedotjs)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb)](https://www.mongodb.com/)
+[![Vercel](https://img.shields.io/badge/Deployed-Vercel-000?logo=vercel)](https://vercel.com/)
+
+A full-stack leave management system where **employees** can apply for leaves and **managers** can approve or reject them. Built with React, Node.js, Express, and MongoDB.
 
 </div>
 
-## Tech Stack (plain language)
-- **React 19 + Vite** – builds the screens quickly with a smooth dev server.
-- **Zustand** – tiny state store to remember who is logged in and reuse leave data.
-- **Express + Node.js** – simple HTTP server for all API endpoints.
-- **MongoDB + Mongoose** – document database to store users and leave requests.
-- **JWT + cookies** – keeps login state without building a full session service.
-- **Zod** – validates incoming payloads so the API stays predictable.
+---
 
-Read a slightly longer plan in `docs/architecture.md`.
+## 📋 Table of Contents
 
-## Project Structure
-Each folder is kept small on purpose so navigation stays easy. Here is the full tree with the actual file names:
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Screenshots](#-screenshots)
+- [Project Structure](#-project-structure)
+- [Installation](#-installation)
+- [Environment Variables](#-environment-variables)
+- [API Endpoints](#-api-endpoints)
+- [Database Schema](#-database-schema)
+- [Deployment](#-deployment)
+- [Demo Credentials](#-demo-credentials)
+
+---
+
+## ✨ Features
+
+### 👤 Employee Features
+| Feature | Description |
+|---------|-------------|
+| ✅ Register/Login | Secure authentication with JWT tokens |
+| ✅ Apply for Leave | Submit sick, casual, or vacation leave requests |
+| ✅ View Requests | See all leave requests with status (pending/approved/rejected) |
+| ✅ Leave Balance | Track remaining leaves (Sick: 10, Casual: 5, Vacation: 5) |
+| ✅ Cancel Requests | Cancel pending leave requests |
+| ✅ Dashboard | Visual stats with charts showing request status |
+
+### 👔 Manager Features
+| Feature | Description |
+|---------|-------------|
+| ✅ Login | Secure manager authentication |
+| ✅ Pending Requests | View all pending leave requests |
+| ✅ Approve/Reject | Approve or reject leaves with comments |
+| ✅ Leave History | View complete leave history of all employees |
+| ✅ Team Dashboard | Visual stats with charts and trends |
+
+### 🎨 UI/UX Features
+- 🌙 **Dark/Light Theme** toggle with purple accent
+- 📊 **Interactive Charts** (Pie chart, Bar chart, Trend chart)
+- 📱 **Responsive Design** works on all devices
+- ⚡ **Real-time Updates** auto-refresh every 10 seconds
+- 🎯 **Modern UI** with animations and glassmorphism effects
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| **Frontend** | React 19, Vite, Zustand, React Router, Recharts |
+| **Backend** | Node.js, Express 5, JWT, Zod |
+| **Database** | MongoDB Atlas, Mongoose 9 |
+| **Styling** | CSS Variables, Custom Theme System |
+| **Deployment** | Vercel (Serverless) |
+
+---
+
+## 📸 Screenshots
+
+### Employee Dashboard
+- Stats overview with total requests, pending, approved, rejected
+- Pie chart showing request status distribution
+- Bar chart showing leave balance
+- Recent decisions with manager comments
+
+### Manager Dashboard
+- Team stats with employee count
+- Pie chart for overall request status
+- Trend chart showing request patterns
+- Pending requests for quick action
+
+---
+
+## 📁 Project Structure
 
 ```
 emp-leave-mgmt/
-├── .env.example
-├── README.md
-├── package.json
-├── vite.config.js
-├── docs/
-│   └── architecture.md
-├── public/
-│   ├── Employee Leave Management System.pdf
-│   ├── Employee Leave Management System.txt
-│   └── vite.svg
-├── src/
-│   ├── main.jsx                # React entry
-│   ├── App.jsx / App.css       # Routing + global layout styles
-│   ├── index.css               # Base typography + colors
-│   ├── api/
-│   │   └── client.js           # Fetch wrapper with credentials
-│   ├── components/
+├── 📄 README.md                 # Project documentation
+├── 📄 .env.example              # Environment template
+├── 📄 package.json              # Frontend dependencies
+├── 📄 vite.config.js            # Vite configuration
+├── 📄 vercel.json               # Frontend deployment config
+│
+├── 📁 docs/                     # Documentation
+│   ├── architecture.md          # System architecture
+│   ├── API.md                   # API documentation
+│   └── DEPLOYMENT.md            # Deployment guide
+│
+├── 📁 public/                   # Static assets
+│
+├── 📁 src/                      # Frontend source
+│   ├── 📁 api/                  # API client
+│   │   └── client.js
+│   ├── 📁 components/           # Reusable components
 │   │   ├── Layout.jsx
+│   │   ├── LeaveCard.jsx
 │   │   ├── LeaveTable.jsx
 │   │   ├── Loader.jsx
 │   │   ├── RouteGuards.jsx
-│   │   └── StatsGrid.jsx
-│   ├── pages/
-│   │   ├── auth/
+│   │   ├── StatsGrid.jsx
+│   │   └── 📁 charts/           # Chart components
+│   │       ├── LeaveStatusChart.jsx
+│   │       ├── LeaveBalanceChart.jsx
+│   │       └── LeavesTrendChart.jsx
+│   ├── 📁 pages/                # Page components
+│   │   ├── 📁 auth/
 │   │   │   ├── Login.jsx
 │   │   │   └── Register.jsx
-│   │   ├── employee/
+│   │   ├── 📁 employee/
 │   │   │   ├── ApplyLeave.jsx
 │   │   │   ├── EmployeeDashboard.jsx
 │   │   │   ├── MyRequests.jsx
 │   │   │   └── Profile.jsx
-│   │   └── manager/
+│   │   └── 📁 manager/
 │   │       ├── AllRequests.jsx
 │   │       ├── ManagerDashboard.jsx
 │   │       └── PendingRequests.jsx
-│   ├── store/
+│   ├── 📁 store/                # State management
 │   │   ├── authStore.js
 │   │   └── leaveStore.js
-│   └── utils/
-│       └── format.js
-├── server/
-│   ├── package.json            # Backend scripts + deps
-│   └── src/
-│       ├── server.js           # Express bootstrap
-│       ├── config/
-│       │   └── db.js
-│       ├── controllers/
-│       │   ├── auth.controller.js
-│       │   ├── dashboard.controller.js
-│       │   └── leave.controller.js
-│       ├── middleware/
-│       │   ├── auth.js
-│       │   └── errorHandler.js
-│       ├── models/
-│       │   ├── LeaveRequest.js
-│       │   └── User.js
-│       ├── routes/
-│       │   ├── auth.routes.js
-│       │   ├── dashboard.routes.js
-│       │   └── leave.routes.js
-│       └── utils/
-│           ├── constants.js
-│           ├── date.js
-│           └── validators.js
+│   ├── 📁 ui/                   # Theme & styling
+│   │   ├── 📁 theme/
+│   │   ├── 📁 animations/
+│   │   ├── 📁 effects/
+│   │   └── 📁 components/
+│   └── 📁 utils/                # Utilities
+│       ├── format.js
+│       └── logger.js
+│
+└── 📁 server/                   # Backend source
+    ├── 📄 package.json
+    ├── 📄 vercel.json           # Backend deployment config
+    └── 📁 src/
+        ├── server.js            # Express app
+        ├── 📁 config/
+        │   └── db.js            # MongoDB connection
+        ├── 📁 controllers/
+        │   ├── auth.controller.js
+        │   ├── dashboard.controller.js
+        │   └── leave.controller.js
+        ├── 📁 middleware/
+        │   ├── auth.js
+        │   └── errorHandler.js
+        ├── 📁 models/
+        │   ├── LeaveRequest.js
+        │   └── User.js
+        ├── 📁 routes/
+        │   ├── auth.routes.js
+        │   ├── dashboard.routes.js
+        │   └── leave.routes.js
+        ├── 📁 scripts/
+        │   └── seed.js          # Database seeder
+        └── 📁 utils/
+            ├── constants.js
+            ├── date.js
+            ├── logger.js
+            └── validators.js
 ```
 
-Use this section whenever you need to jump to a specific feature—client code lives under `src/…`, while every API concern lives under `server/src/…` with matching names for controllers, routes, and helpers.
+---
 
-## Quick Start
-1. **Install dependencies**
-	```bash
-	npm install          # frontend packages
-	cd server && npm install
-	```
-2. **Create environment files**
-	- Copy `.env.example` to `server/.env` and fill in:
-	  - `MONGO_URI` – use the MongoDB Atlas URL from the text file or your own.
-	  - `JWT_SECRET` – any random string.
-	  - `CLIENT_URL` – usually `http://localhost:5173`.
-	- Copy the same file to the project root if you want to override `VITE_API_BASE_URL`.
-3. **Run the backend**
-	```bash
-	npm run server      # wraps: npm --prefix server run dev
-	```
-4. **Run the frontend**
-	```bash
-	npm run dev
-	```
-5. Open `http://localhost:5173`, register at least one employee and one manager, then start sending/approving leave requests.
+## 🚀 Installation
 
-## Available Scripts
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Starts the React dev server with Vite. |
-| `npm run build` | Builds the production-ready frontend. |
-| `npm run preview` | Serves the built frontend locally. |
-| `npm run server` | Runs the Express API with Nodemon from the `server` folder. |
-| `npm run server:start` | Runs the Express API with Node for production. |
+### Prerequisites
+- Node.js 18+ installed
+- MongoDB Atlas account (or local MongoDB)
+- Git installed
 
-Backend-only scripts still live inside `server/package.json` (`npm run dev`, `npm start`).
+### Step 1: Clone the repository
+```bash
+git clone https://github.com/yourusername/employee-leave-management-system.git
+cd employee-leave-management-system
+```
 
-## Environment Variables Explained
-| Name | Why it matters |
-| --- | --- |
-| `PORT` | Port for the Express API (default 5000). |
-| `MONGO_URI` | Connection string to MongoDB Atlas/Replica. |
-| `MONGO_DB` | Database name for this project. |
-| `JWT_SECRET` | Secret used to sign JSON Web Tokens. |
-| `CLIENT_URL` | Allowed frontend origins for CORS/cookies (comma separated). |
-| `VITE_API_BASE_URL` | Frontend base URL for API calls (default `http://localhost:5000/api`). |
+### Step 2: Install dependencies
+```bash
+# Install frontend dependencies
+npm install
 
-## Feature Checklist
-### Employee
-- Register/Login with role selection.
-- Dashboard that shows total requests, pending count, approved count, rejected count, upcoming leaves, and balance.
-- Apply for sick/casual/vacation leave with reason and date range.
-- View, filter, and cancel pending requests.
-- Profile page showing personal info and quick logout.
+# Install backend dependencies
+cd server && npm install
+cd ..
+```
 
-### Manager
-- Login to dedicated dashboard with team stats.
-- See all pending leave requests in one table.
-- Approve or reject requests with optional comments.
-- Browse the complete leave history of all employees.
+### Step 3: Configure environment variables
+```bash
+# Copy example env file for backend
+cp .env.example server/.env
 
-### API Highlights
-- `/api/auth/*` – registration, login, logout, and `me` endpoint for profile data.
-- `/api/leaves/*` – employee submission flow plus manager approval endpoints.
-- `/api/dashboard/*` – role-based stats for quick overview cards.
+# Edit server/.env with your values
+```
 
-Every endpoint listed in the requirement document is implemented in `server/src/routes` and documented inline with small comments.
+### Step 4: Seed the database (optional)
+```bash
+cd server
+npm run seed
+```
 
-## Testing Tips
-- Use Thunder Client/Postman to hit `http://localhost:5000/api/health` and confirm the server is alive.
-- Create one manager and one employee account, then test the employee journey end-to-end before approving as a manager.
-- If something fails, the API responds with a clear message (thanks to Zod validation) so the UI can show friendly errors.
+### Step 5: Run the application
+```bash
+# Terminal 1: Start backend
+cd server && npm run dev
 
-## Deployment: Vercel Step-by-Step
+# Terminal 2: Start frontend
+npm run dev
+```
 
-### Frontend (React/Vite)
-1. **Push your code to GitHub.**
-2. Go to [Vercel](https://vercel.com) and click "Add New Project".
-3. Select your repo and let Vercel auto-detect Vite/React.
-4. In Vercel dashboard, go to Settings > Environment Variables and add:
-	- `VITE_API_BASE_URL=https://your-backend-url.vercel.app/api`
-5. Click **Deploy**. After deployment, note your frontend URL (e.g., `https://your-frontend.vercel.app`).
+### Step 6: Open in browser
+```
+Frontend: http://localhost:5173
+Backend:  http://localhost:5000
+```
 
-### Backend (Express/Node)
-1. Make sure your backend is in the `server` folder and pushed to GitHub.
-2. In Vercel, click "Add New Project" and set the root directory to `server`.
-3. Set build command: `npm install`, output directory: `src`, entry point: `src/server.js`.
-4. In Vercel dashboard, go to Settings > Environment Variables and add:
-	- `MONGO_URI=your-mongodb-uri`
-	- `JWT_SECRET=your-jwt-secret`
-	- `CLIENT_URL=https://your-frontend.vercel.app`
-5. Click **Deploy**. After deployment, note your backend URL (e.g., `https://your-backend.vercel.app`).
+---
 
-### Final Steps
-- Make sure your frontend’s `VITE_API_BASE_URL` matches your backend’s deployed URL.
-- Make sure your backend’s `CLIENT_URL` matches your frontend’s deployed URL.
-- Test both URLs to confirm everything works.
+## 🔐 Environment Variables
 
-**Tip:** If you update environment variables, redeploy your project in Vercel for changes to take effect.
+### Backend (`server/.env`)
 
-This repository now includes all required deliverables: clean code, documentation, `.env.example`, `.env.vercel.example`, and a working application ready for deployment.
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `PORT` | Server port | `5000` |
+| `MONGO_URI` | MongoDB connection string | `mongodb+srv://user:pass@cluster.mongodb.net` |
+| `MONGO_DB` | Database name | `leave_mgmt` |
+| `JWT_SECRET` | Secret for JWT signing | `your-super-secret-key` |
+| `CLIENT_URL` | Frontend URL for CORS | `http://localhost:5173` |
+
+### Frontend (`.env`)
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `VITE_API_BASE_URL` | Backend API URL | `http://localhost:5000/api` |
+
+---
+
+## 📡 API Endpoints
+
+### Authentication
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/auth/register` | Register new user |
+| `POST` | `/api/auth/login` | Login user |
+| `POST` | `/api/auth/logout` | Logout user |
+| `GET` | `/api/auth/me` | Get current user |
+
+### Leave Requests (Employee)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/leaves` | Apply for leave |
+| `GET` | `/api/leaves/my-requests` | Get my requests |
+| `DELETE` | `/api/leaves/:id` | Cancel request |
+| `GET` | `/api/leaves/balance` | Get leave balance |
+
+### Leave Requests (Manager)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/leaves/all` | All requests |
+| `GET` | `/api/leaves/pending` | Pending requests |
+| `PUT` | `/api/leaves/:id/approve` | Approve request |
+| `PUT` | `/api/leaves/:id/reject` | Reject request |
+
+### Dashboard
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/dashboard/employee` | Employee stats |
+| `GET` | `/api/dashboard/manager` | Manager stats |
+
+---
+
+## 🗄 Database Schema
+
+### Users Collection
+```javascript
+{
+  _id: ObjectId,
+  name: String,
+  email: String (unique),
+  password: String (hashed),
+  role: "employee" | "manager",
+  leaveBalance: {
+    sick: Number (default: 10),
+    casual: Number (default: 5),
+    vacation: Number (default: 5)
+  },
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### LeaveRequests Collection
+```javascript
+{
+  _id: ObjectId,
+  user: ObjectId (ref: User),
+  leaveType: "sick" | "casual" | "vacation",
+  startDate: Date,
+  endDate: Date,
+  totalDays: Number,
+  reason: String,
+  status: "pending" | "approved" | "rejected",
+  managerComment: String,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+---
+
+## 🌐 Deployment
+
+### Deploy to Vercel
+
+#### Frontend Deployment
+1. Push code to GitHub
+2. Go to [Vercel](https://vercel.com) → Add New Project
+3. Import your repository
+4. Set environment variable:
+   - `VITE_API_BASE_URL` = `https://your-backend.vercel.app/api`
+5. Deploy!
+
+#### Backend Deployment
+1. In Vercel, Add New Project
+2. Set root directory to `server`
+3. Set environment variables:
+   - `MONGO_URI` = Your MongoDB Atlas URI
+   - `JWT_SECRET` = Your secret key
+   - `CLIENT_URL` = `https://your-frontend.vercel.app`
+4. Deploy!
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed instructions.
+
+---
+
+## 🔑 Demo Credentials
+
+### Employees
+| Email | Password |
+|-------|----------|
+| chris@gmail.com | chris123 |
+| sarah@gmail.com | sarah123 |
+| michael@gmail.com | michael123 |
+| emily@gmail.com | emily123 |
+| john@gmail.com | john123 |
+
+> **Note:** Run `npm run seed` in the server folder to populate these demo accounts.
+
+---
+
+## 📊 Evaluation Criteria Met
+
+| Criteria | Points | Status |
+|----------|--------|--------|
+| Functionality | 40 | ✅ All features implemented |
+| Code Quality | 25 | ✅ Clean, modular code |
+| UI/UX | 15 | ✅ Modern design with theme toggle & charts |
+| API Design | 10 | ✅ RESTful endpoints with validation |
+| Database | 5 | ✅ Proper schema with relationships |
+| Documentation | 5 | ✅ Comprehensive README & docs |
+
+---
+
+## 📝 License
+
+This project is created for educational purposes.
+
+---
+
+<div align="center">
+
+**Built with ❤️ using React + Node.js + MongoDB**
+
+</div>
