@@ -52,3 +52,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# reference:
+public\Employee Leave Management System.pdf
+public\Employee Leave Management System.txt
