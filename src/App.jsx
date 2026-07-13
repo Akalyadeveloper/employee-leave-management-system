@@ -7,6 +7,7 @@ import Layout from './components/Layout.jsx'
 import Loader from './components/Loader.jsx'
 import Login from './pages/auth/Login.jsx'
 import Register from './pages/auth/Register.jsx'
+import Home from './pages/Home.jsx'
 import EmployeeDashboard from './pages/employee/EmployeeDashboard.jsx'
 import ApplyLeave from './pages/employee/ApplyLeave.jsx'
 import MyRequests from './pages/employee/MyRequests.jsx'
@@ -17,6 +18,9 @@ import AllRequests from './pages/manager/AllRequests.jsx'
 
 const HomeRouter = () => {
   const user = useAuthStore((state) => state.user)
+  if (!user) {
+    return <Home />
+  }
   if (user?.role === 'manager') {
     return <Navigate to="/manager" replace />
   }
@@ -38,6 +42,10 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route
+          path="/"
+          element={<HomeRouter />}
+        />
         <Route
           path="/login"
           element={
@@ -61,7 +69,6 @@ const App = () => {
             </ProtectedRoute>
           }
         >
-          <Route index element={<HomeRouter />} />
           <Route
             path="dashboard"
             element={
