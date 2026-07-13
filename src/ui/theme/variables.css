@@ -1,0 +1,194 @@
+/* ============================================
+   EMPLOYEE LEAVE MANAGEMENT - THEME VARIABLES
+   Futuristic Purple/Light Theme System
+   ============================================ */
+
+:root {
+  /* === COLOR PALETTE === */
+  
+  /* Primary Purple Gradient */
+  --color-primary-50: #faf5ff;
+  --color-primary-100: #f3e8ff;
+  --color-primary-200: #e9d5ff;
+  --color-primary-300: #d8b4fe;
+  --color-primary-400: #c084fc;
+  --color-primary-500: #a855f7;
+  --color-primary-600: #9333ea;
+  --color-primary-700: #7e22ce;
+  --color-primary-800: #6b21a8;
+  --color-primary-900: #581c87;
+  
+  /* Accent Colors */
+  --color-accent-cyan: #06b6d4;
+  --color-accent-pink: #ec4899;
+  --color-accent-violet: #8b5cf6;
+  --color-accent-indigo: #6366f1;
+  
+  /* Semantic Colors */
+  --color-success: #22c55e;
+  --color-success-light: #dcfce7;
+  --color-warning: #f59e0b;
+  --color-warning-light: #fef3c7;
+  --color-error: #ef4444;
+  --color-error-light: #fee2e2;
+  --color-info: #3b82f6;
+  --color-info-light: #dbeafe;
+  
+  /* Neutral Colors */
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #64748b;
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
+  
+  /* === SPACING === */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  
+  /* === TYPOGRAPHY === */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  
+  /* === BORDERS === */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+  
+  /* === SHADOWS === */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-glow: 0 0 20px rgb(168 85 247 / 0.3);
+  --shadow-glow-lg: 0 0 40px rgb(168 85 247 / 0.4);
+  
+  /* === TRANSITIONS === */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+  --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* === Z-INDEX === */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal: 300;
+  --z-tooltip: 400;
+  --z-toast: 500;
+}
+
+/* ============================================
+   LIGHT THEME (Default)
+   ============================================ */
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: var(--color-gray-50);
+  --bg-tertiary: var(--color-gray-100);
+  --bg-elevated: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.8);
+  
+  --text-primary: var(--color-gray-900);
+  --text-secondary: var(--color-gray-600);
+  --text-tertiary: var(--color-gray-500);
+  --text-inverse: #ffffff;
+  
+  --border-color: var(--color-gray-200);
+  --border-color-strong: var(--color-gray-300);
+  
+  --accent-gradient: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-accent-violet) 50%, var(--color-accent-pink) 100%);
+  --accent-gradient-subtle: linear-gradient(135deg, var(--color-primary-100) 0%, var(--color-primary-50) 100%);
+  
+  --sidebar-bg: linear-gradient(180deg, var(--color-primary-700) 0%, var(--color-primary-900) 100%);
+  --sidebar-text: rgba(255, 255, 255, 0.9);
+  --sidebar-text-muted: rgba(255, 255, 255, 0.6);
+  --sidebar-hover: rgba(255, 255, 255, 0.1);
+  --sidebar-active: rgba(255, 255, 255, 0.2);
+  
+  --card-bg: #ffffff;
+  --card-border: var(--color-gray-200);
+  --card-shadow: var(--shadow-md);
+  
+  --input-bg: #ffffff;
+  --input-border: var(--color-gray-300);
+  --input-focus-border: var(--color-primary-500);
+  --input-focus-ring: rgba(168, 85, 247, 0.2);
+  
+  --btn-primary-bg: var(--accent-gradient);
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: var(--color-gray-100);
+  --btn-secondary-text: var(--color-gray-700);
+}
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+[data-theme="dark"] {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-tertiary: #1a1a25;
+  --bg-elevated: #1e1e2a;
+  --bg-glass: rgba(10, 10, 15, 0.9);
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  --text-inverse: #0a0a0f;
+  
+  --border-color: rgba(148, 163, 184, 0.1);
+  --border-color-strong: rgba(148, 163, 184, 0.2);
+  
+  --accent-gradient: linear-gradient(135deg, var(--color-primary-400) 0%, var(--color-accent-violet) 50%, var(--color-accent-cyan) 100%);
+  --accent-gradient-subtle: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+  
+  --sidebar-bg: linear-gradient(180deg, #12121a 0%, #0a0a0f 100%);
+  --sidebar-text: rgba(255, 255, 255, 0.9);
+  --sidebar-text-muted: rgba(255, 255, 255, 0.5);
+  --sidebar-hover: rgba(168, 85, 247, 0.1);
+  --sidebar-active: rgba(168, 85, 247, 0.2);
+  
+  --card-bg: #12121a;
+  --card-border: rgba(148, 163, 184, 0.1);
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  
+  --input-bg: #1a1a25;
+  --input-border: rgba(148, 163, 184, 0.2);
+  --input-focus-border: var(--color-primary-400);
+  --input-focus-ring: rgba(168, 85, 247, 0.3);
+  
+  --btn-primary-bg: var(--accent-gradient);
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: #1e1e2a;
+  --btn-secondary-text: #f1f5f9;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+  --shadow-glow: 0 0 30px rgb(168 85 247 / 0.4);
+  --shadow-glow-lg: 0 0 60px rgb(168 85 247 / 0.5);
+}

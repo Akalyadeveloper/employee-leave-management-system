@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
+import ThemeToggle from '../ui/components/ThemeToggle.jsx'
 
 const NAV_LINKS = {
   employee: [
@@ -48,9 +49,12 @@ const Layout = () => {
             </NavLink>
           ))}
         </nav>
-        <button className="btn btn--ghost" onClick={handleLogout}>
-          Logout
-        </button>
+        <div className="sidebar__footer">
+          <ThemeToggle />
+          <button className="btn btn--ghost sidebar__logout" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </aside>
       <main className="content">
         <header className="page-header">
@@ -63,7 +67,7 @@ const Layout = () => {
             <span>{user?.email}</span>
           </div>
         </header>
-        <div className="page-body">
+        <div className="page-body ui-animate-fade-in">
           <Outlet />
         </div>
       </main>

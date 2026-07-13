@@ -1,0 +1,348 @@
+/* ============================================
+   UI ANIMATIONS & EFFECTS
+   Modern Motion Design
+   ============================================ */
+
+/* === FADE ANIMATIONS === */
+@keyframes ui-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ui-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ui-fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ui-fade-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ui-fade-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* === SCALE ANIMATIONS === */
+@keyframes ui-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ui-scale-in-bounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* === SLIDE ANIMATIONS === */
+@keyframes ui-slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes ui-slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes ui-slide-in-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* === PULSE ANIMATIONS === */
+@keyframes ui-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes ui-pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* === SPIN ANIMATIONS === */
+@keyframes ui-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === BOUNCE ANIMATION === */
+@keyframes ui-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* === SHAKE ANIMATION === */
+@keyframes ui-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+/* === GLOW ANIMATION === */
+@keyframes ui-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.6);
+  }
+}
+
+/* === GRADIENT ANIMATION === */
+@keyframes ui-gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* === FLOAT ANIMATION === */
+@keyframes ui-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  75% {
+    transform: translateY(-5px) rotate(-1deg);
+  }
+}
+
+/* === UTILITY CLASSES === */
+.ui-animate-fade-in {
+  animation: ui-fade-in var(--transition-base) ease-out;
+}
+
+.ui-animate-fade-in-up {
+  animation: ui-fade-in-up var(--transition-slow) ease-out;
+}
+
+.ui-animate-fade-in-down {
+  animation: ui-fade-in-down var(--transition-slow) ease-out;
+}
+
+.ui-animate-scale-in {
+  animation: ui-scale-in var(--transition-base) ease-out;
+}
+
+.ui-animate-scale-bounce {
+  animation: ui-scale-in-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ui-animate-slide-right {
+  animation: ui-slide-in-right var(--transition-slow) ease-out;
+}
+
+.ui-animate-pulse {
+  animation: ui-pulse 2s infinite;
+}
+
+.ui-animate-spin {
+  animation: ui-spin 1s linear infinite;
+}
+
+.ui-animate-bounce {
+  animation: ui-bounce 1s infinite;
+}
+
+.ui-animate-glow {
+  animation: ui-glow-pulse 2s infinite;
+}
+
+.ui-animate-float {
+  animation: ui-float 6s ease-in-out infinite;
+}
+
+/* === STAGGERED ANIMATIONS === */
+.ui-stagger > * {
+  animation: ui-fade-in-up 0.4s ease-out backwards;
+}
+
+.ui-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.ui-stagger > *:nth-child(2) { animation-delay: 50ms; }
+.ui-stagger > *:nth-child(3) { animation-delay: 100ms; }
+.ui-stagger > *:nth-child(4) { animation-delay: 150ms; }
+.ui-stagger > *:nth-child(5) { animation-delay: 200ms; }
+.ui-stagger > *:nth-child(6) { animation-delay: 250ms; }
+.ui-stagger > *:nth-child(7) { animation-delay: 300ms; }
+.ui-stagger > *:nth-child(8) { animation-delay: 350ms; }
+
+/* === HOVER EFFECTS === */
+.ui-hover-lift {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.ui-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.ui-hover-glow {
+  transition: box-shadow var(--transition-base);
+}
+
+.ui-hover-glow:hover {
+  box-shadow: var(--shadow-glow);
+}
+
+.ui-hover-scale {
+  transition: transform var(--transition-base);
+}
+
+.ui-hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* === LOADING SPINNER === */
+.ui-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--color-primary-500);
+  border-radius: 50%;
+  animation: ui-spin 0.8s linear infinite;
+}
+
+.ui-spinner--lg {
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
+}
+
+/* === PAGE TRANSITION === */
+.ui-page-enter {
+  animation: ui-fade-in-up 0.3s ease-out;
+}
+
+/* === RIPPLE EFFECT === */
+.ui-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ui-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s, opacity 0.6s;
+  opacity: 0;
+}
+
+.ui-ripple:active::after {
+  width: 300px;
+  height: 300px;
+  opacity: 0;
+}
+
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
