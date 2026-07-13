@@ -19,6 +19,19 @@ const formatUser = (user) => ({
   email: user.email,
   role: user.role,
   leaveBalance: user.leaveBalance,
+  phone: user.phone || '',
+  department: user.department || '',
+  designation: user.designation || '',
+  dateOfBirth: user.dateOfBirth || null,
+  address: user.address || '',
+  city: user.city || '',
+  state: user.state || '',
+  zipCode: user.zipCode || '',
+  employeeId: user.employeeId || '',
+  joinDate: user.joinDate || null,
+  emergencyContact: user.emergencyContact || '',
+  emergencyPhone: user.emergencyPhone || '',
+  bio: user.bio || '',
 })
 
 const issueToken = (res, user, statusCode = 200) => {
@@ -79,6 +92,38 @@ export const login = async (req, res, next) => {
 export const me = async (req, res) => {
   logger.debug('Auth', 'User info requested', { userId: req.user._id })
   res.json({ user: formatUser(req.user) })
+}
+
+export const updateProfile = async (req, res, next) => {
+  try {
+    logger.info('Auth', 'Profile update attempt', { userId: req.user._id })
+    const { name, phone, department, designation, dateOfBirth, address, city, state, zipCode, emergencyContact, emergencyPhone, bio } = req.body
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        name: name || req.user.name,
+        phone: phone || req.user.phone,
+        department: department || req.user.department,
+        designation: designation || req.user.designation,
+        dateOfBirth: dateOfBirth || req.user.dateOfBirth,
+        address: address || req.user.address,
+        city: city || req.user.city,
+        state: state || req.user.state,
+        zipCode: zipCode || req.user.zipCode,
+        emergencyContact: emergencyContact || req.user.emergencyContact,
+        emergencyPhone: emergencyPhone || req.user.emergencyPhone,
+        bio: bio || req.user.bio,
+      },
+      { new: true, runValidators: true },
+    )
+
+    logger.info('Auth', 'Profile updated successfully', { userId: req.user._id })
+    res.json({ user: formatUser(updatedUser), message: 'Profile updated successfully' })
+  } catch (error) {
+    logger.error('Auth', 'Profile update error', { error: error.message })
+    next(error)
+  }
 }
 
 export const logout = (req, res) => {

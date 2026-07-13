@@ -44,6 +44,21 @@ const useAuthStore = create((set, get) => ({
     logger.success('Auth', 'Logged out')
     set({ user: null, status: 'success' })
   },
+
+  updateProfile: async (payload) => {
+    logger.info('Auth', 'Profile update attempt', { userId: get().user.id })
+    set({ status: 'loading', error: null })
+    try {
+      const data = await api.put('/auth/profile', payload)
+      logger.success('Auth', 'Profile updated successfully', { userId: data.user.id })
+      set({ user: data.user, status: 'success', error: null })
+      return data
+    } catch (error) {
+      logger.error('Auth', 'Profile update failed', { error: error.message })
+      set({ status: 'error', error: error.message })
+      throw error
+    }
+  },
 }))
 
 export default useAuthStore
