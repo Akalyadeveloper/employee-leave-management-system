@@ -4,9 +4,10 @@ import useAuthStore from '../../store/authStore'
 
 const Register = () => {
   const navigate = useNavigate()
-  const { register, status } = useAuthStore()
+  const { register } = useAuthStore()
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'employee' })
   const [error, setError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleChange = (event) => {
     setForm((prev) => ({ ...prev, [event.target.name]: event.target.value }))
@@ -29,11 +30,14 @@ const Register = () => {
       setError(validationError)
       return
     }
+    setIsSubmitting(true)
     try {
       await register(form)
       navigate('/')
     } catch (err) {
       setError(err.message)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -70,8 +74,8 @@ const Register = () => {
           </select>
         </label>
         {error && <p className="form__error">{error}</p>}
-        <button className="btn" disabled={status === 'loading'}>
-          {status === 'loading' ? 'Creating...' : 'Register'}
+        <button className="btn" disabled={isSubmitting}>
+          {isSubmitting ? 'Creating...' : 'Register'}
         </button>
       </form>
       <p className="form__footer">
